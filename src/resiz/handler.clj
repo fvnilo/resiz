@@ -8,22 +8,26 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :as response]))
 
+(defn parse-int [s]
+   (Integer. (re-find  #"\d+" s )))
+
 (defn resize-image
-  [image]
+  [filename height width]
 
-  (def img (-> image
-               (io/resource)
-               (.getPath)
-               (io/file)))
+  (def image-file (-> filename
+                     (io/resource)
+                     (.getPath)
+                     (io/file)))
 
-  (format/as-stream ((resize-fn 500 500 speed) img) "jpg"))
+  (format/as-stream ((resize-fn height width speed) image-file) "jpg"))
 
-(defroutes app-routes
-  (GET "/" []
-    (def resized-image (resize-image "madagascar-morondava.jpeg"))
-    (-> (response/response resized-image)
-        (response/content-type "image/jpeg")))
+(defroutes resize-image-routes
+  (GET "/:height/:width" [height width]
+    (let [resized-image (resize-image "madagascar-morondava.jpeg" (parse-int height) (parse-int width))]
+      (-> (response/response resized-image)
+          (response/content-type "image/jpeg"))))
+
   (route/not-found "Not Found"))
 
 (def app
-  (wrap-defaults app-routes site-defaults))
+  (wrap-defaults resize-image-routes site-defaults))

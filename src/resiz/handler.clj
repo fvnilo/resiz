@@ -21,8 +21,8 @@
 (defroutes app-routes
   (GET "/" []
     (def resized-image (resize-image "madagascar-morondava.jpeg"))
-    (println resized-image)
-    (response/response resized-image))
+    (-> (response/response resized-image)
+        (response/content-type "image/jpeg")))
   (route/not-found "Not Found"))
 
 (def app

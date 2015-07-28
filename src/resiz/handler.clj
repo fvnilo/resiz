@@ -8,9 +8,6 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :as response]))
 
-(defn parse-int [s]
-   (Integer. (re-find  #"\d+" s )))
-
 (defn resize-image
   [filename height width]
 
@@ -23,12 +20,16 @@
 
 (defroutes resize-image-routes
   (GET "/:height/:width" [height width]
-    (let [image-file "madagascar-morondava.jpeg"
-          height (parse-int height)
-          width (parse-int width)]
-      (-> (resize-image image-file height width)
-          (response/response)
-          (response/content-type "image/jpeg"))))
+    (if (not (number? (read-string height)))
+      (response/status (response/response "invalid height") 400)
+      (if (not (number? (read-string width)))
+        (response/status (response/response "invalid width") 400)
+        (let [image-file "madagascar-morondava.jpeg"
+              height (read-string height)
+              width (read-string width)]
+          (-> (resize-image image-file height width)
+              (response/response)
+              (response/content-type "image/jpeg"))))))
 
   (route/not-found "Not Found"))
 

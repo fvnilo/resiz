@@ -4,10 +4,13 @@
             [resiz.handler :refer :all]))
 
 (deftest test-app
-  (testing "main route"
-    (let [response (app (mock/request :get "/"))]
-      (is (= (:status response) 200))
-      (is (= (:body response) "Hello World"))))
+  (testing "image resize route"
+    (let [response (app (mock/request :get "/1/1"))]
+      (is (= (:status response) 200)))
+    (let [response (app (mock/request :get "/a/1"))]
+      (is (= (:status response) 400)))
+    (let [response (app (mock/request :get "/1/a"))]
+      (is (= (:status response) 400))))
 
   (testing "not-found route"
     (let [response (app (mock/request :get "/invalid"))]

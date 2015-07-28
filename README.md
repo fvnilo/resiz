@@ -18,6 +18,9 @@ To start a web server for the application, run:
 
     lein ring server-headler
 
+You can then access the URL http://localhost:3000/:width/:height from your browser
+where width and height are numerical values.
+
 ## License
 
 Copyright © 2015 Ny Fanilo Andrianjafy

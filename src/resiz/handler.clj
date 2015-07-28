@@ -23,8 +23,11 @@
 
 (defroutes resize-image-routes
   (GET "/:height/:width" [height width]
-    (let [resized-image (resize-image "madagascar-morondava.jpeg" (parse-int height) (parse-int width))]
-      (-> (response/response resized-image)
+    (let [image-file "madagascar-morondava.jpeg"
+          height (parse-int height)
+          width (parse-int width)]
+      (-> (resize-image image-file height width)
+          (response/response)
           (response/content-type "image/jpeg"))))
 
   (route/not-found "Not Found"))

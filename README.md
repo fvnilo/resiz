@@ -4,7 +4,7 @@ Resiz
 
 ## Description
 
-A simple API that return resized versions of certain images.
+A simple API that return resized versions of known images.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ You will need [Leiningen][] 2.0.0 or above installed.
 
 To start a web server for the application, run:
 
-    lein ring server
+    lein ring server-headler
 
 ## License
 

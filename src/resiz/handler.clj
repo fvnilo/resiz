@@ -14,7 +14,7 @@
 (defn compute-image-file-ratio [path]
   (with-open [stream (java.io.FileInputStream. (get-full-path path))]
     (let [image (javax.imageio.ImageIO/read stream)]
-    
+
       (/ (.getWidth image) (.getHeight image)))))
 
 (defn ratio-valid? [path w h]
@@ -41,16 +41,15 @@
 
         (format/as-stream (resizer img-file) "jpg")))
 
-(defn resize-handler [w h path]
+(defn resize-handler [path w h]
   (if (not (image-exists? path))
     (response/status (response/response "image does not exists") 404)
     (if (not (valid? path w h))
       (response/status (response/response "invalid parameters") 400)
       (let [width   (Integer. w)
-            height (Integer. h)
-            image-file path]
+            height (Integer. h)]
 
-        (with-open [image-stream (resize-image image-file height width)]
+        (with-open [image-stream (resize-image path height width)]
           (-> image-stream
               (response/response)
               (response/content-type "image/jpeg")))))))
@@ -62,7 +61,7 @@
           height (params :height)
           image-path (params :*)]
 
-          (resize-handler width height image-path)))
+          (resize-handler image-path width height)))
    (route/not-found "Not Found"))
 
 (def app

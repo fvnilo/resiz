@@ -35,8 +35,8 @@
 (defn valid? [path w h]
   (and (dimensions-valid? w h) (ratio-valid? path w h)))
 
-(defn resize-image [path height width]
-  (let [resizer (resize-fn height width speed)
+(defn resize-image [path width height]
+  (let [resizer (resize-fn width height speed)
         img-file (-> path (get-full-path) (io/file))]
 
         (format/as-stream (resizer img-file) "jpg")))
@@ -49,7 +49,7 @@
       (let [width   (Integer. w)
             height (Integer. h)]
 
-        (with-open [image-stream (resize-image path height width)]
+        (with-open [image-stream (resize-image path width height)]
           (-> image-stream
               (response/response)
               (response/content-type "image/jpeg")))))))

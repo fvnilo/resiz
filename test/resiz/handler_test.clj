@@ -14,7 +14,11 @@
     (is (false? (dimensions-valid? "a" "1"))))))
 
   (testing "the ratio image computing function"
-    (is (= (compute-image-file-ratio "clojure.jpeg") 1))))
+    (is (= (compute-image-file-ratio "clojure.jpeg") 1)))
+
+  (testing "the ratio-valid? function"
+    (is (true? (ratio-valid? "clojure.jpeg" "1" "1")))
+    (is (false? (ratio-valid? "clojure.jpeg" "2" "1")))))
 
 (deftest resizer
   (testing "the resizer"

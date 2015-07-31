@@ -11,19 +11,17 @@
 (defn get-full-path [path]
   (-> path (io/resource) (.getPath)))
 
-(defn compute-ratio [width height]
-  (/ width height))
-
 (defn compute-image-file-ratio [path]
   (with-open [stream (java.io.FileInputStream. (get-full-path path))]
     (let [image (javax.imageio.ImageIO/read stream)]
-      (compute-ratio (.getWidth image) (.getHeight image)))))
+    
+      (/ (.getWidth image) (.getHeight image)))))
 
 (defn ratio-valid? [path w h]
   (let [width (read-string w)
         height (read-string h)]
 
-    (= (compute-ratio width height) (compute-image-file-ratio path))))
+    (= (/ width height) (compute-image-file-ratio path))))
 
 (defn number-string? [number-string]
   (integer? (read-string number-string)))
@@ -40,6 +38,7 @@
 (defn resize-image [path height width]
   (let [resizer (resize-fn height width speed)
         img-file (-> path (get-full-path) (io/file))]
+
         (format/as-stream (resizer img-file) "jpg")))
 
 (defn resize-handler [w h path]

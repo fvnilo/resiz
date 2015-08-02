@@ -41,18 +41,20 @@
 
         (format/as-stream (resizer img-file) "jpg")))
 
+(defn error-response [status message]
+  (response/status (response/response message) status))
+
 (defn resize-handler [path w h]
-  (if (not (image-exists? path))
-    (response/status (response/response "image does not exists") 404)
-    (if (not (valid? path w h))
-      (response/status (response/response "invalid parameters") 400)
-      (let [width   (Integer. w)
+  (cond
+   (not (image-exists? path)) (error-response 404 "image does not exists")
+   (not (valid? path w h)) (error-response 400 "invalid parameters")
+   :else (let [width   (Integer. w)
             height (Integer. h)]
 
         (with-open [image-stream (resize-image path height width)]
           (-> image-stream
               (response/response)
-              (response/content-type "image/jpeg")))))))
+              (response/content-type "image/jpeg"))))))
 
 (defroutes resize-image-routes
    (GET "/:width/:height/*" request

@@ -4,7 +4,7 @@ Resiz
 
 ## Description
 
-A simple API that return resized versions of known images.
+A simple API that return resized versions of images. This project was done as part of a monthly-ish technical challenge at work.
 
 ## Prerequisites
 
